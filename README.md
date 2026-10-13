@@ -29,6 +29,8 @@ colaborativo moderado.
 ## Estrutura do repositório
 
 ```
+crawler/            Aranha: descobre URLs de eventos (Python)
+  fontes/           um módulo por fonte de busca
 scraper/            coleta de eventos (Python)
   fontes/           um módulo por fonte
 api/                back-end (a definir)
@@ -56,6 +58,14 @@ Se o PowerShell bloquear a ativação, libere scripts locais para o seu usuário
 
 ```powershell
 Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+
+A busca no Google (`crawler/fontes/google_search.py`) usa a API do
+[Serper](https://serper.dev). Crie o arquivo `.env` a partir do modelo e
+preencha `SERPER_API_KEY`:
+
+```powershell
+Copy-Item .env.example .env
 ```
 
 ## Status
