@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hive | Eventos de tecnologia no Ceará</title>
+<!--
+  Página teste "MVP". Não tem back-end: lê direto o data/eventos.json gerado
+  por "python -m scraper.main". Para abrir, sirva a RAIZ do projeto:
+      python -m http.server 8000
+  e acesse http://localhost:8000/web/
+-->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --azul: #0d3478;
+    --cinza: #d9d9d9;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Poppins", Arial, sans-serif;
+    background: var(--cinza);
+    color: var(--azul);
+  }
+
+  header {
+    position: sticky;
+    top: 0;
+    height: 64px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+  }
+  header h1 { margin: 0; font-size: 30px; }
+  #abrir-menu {
+    position: absolute;
+    left: 16px;
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  #abrir-menu span { display: block; height: 3px; margin: 5px 0; border-radius: 2px; background: var(--azul); }
+
+  #fundo-menu { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.35); }
+  #menu {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: min(300px, 85vw);
+    padding: 20px;
+    background: #fff;
+    transform: translateX(-100%);
+    transition: transform 0.2s;
+  }
+  .menu-aberto #menu { transform: none; }
+  .menu-aberto #fundo-menu { display: block; }
+  #menu h2 { margin: 4px 0 8px; font-size: 18px; }
+  #menu label { display: block; margin: 16px 0 6px; font-size: 13px; font-weight: 600; }
+  #menu input, #menu select {
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid #c7c7c7;
+    border-radius: 6px;
+    font: inherit;
+    font-size: 14px;
+  }
+
+  main {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 16px 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 22px;
+  }
+
+  .cartao {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 10px 16px;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+  .cartao img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 12px;
+    background: #ececec;
+  }
+  .cartao h3 { margin: 12px 6px 6px; font-size: 15px; line-height: 1.35; }
+  .linha { display: flex; gap: 6px; margin: 0 6px 6px; font-size: 12px; font-weight: 500; }
+  .linha svg { flex: none; width: 16px; height: 16px; fill: var(--azul); }
+  .ver-mais {
+    /* margin-top: auto joga o botão para o fim do cartão,
+       deixando os botões da mesma fileira alinhados */
+    margin: auto auto 0;
+    width: 62%;
+    padding: 8px 0;
+    border-radius: 6px;
+    background: var(--azul);
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .detalhes { margin-bottom: 12px; }
+
+  footer { padding: 0 16px 28px; text-align: center; font-size: 12px; color: #555; }
+</style>
+</head>
+<body>
+
+<header>
+  <button id="abrir-menu" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+  <h1>Hive</h1>
+</header>
+
+<div id="fundo-menu"></div>
+<div id="menu">
+  <h2>Filtrar eventos</h2>
+  <label for="busca">Buscar</label>
+  <input id="busca" type="search" placeholder="Nome, local ou organizador">
+  <label for="tipo">Tipo de evento</label>
+  <select id="tipo">
+    <option value="">Todos</option>
+    <option value="hackathon">Hackathon</option>
+    <option value="meetup">Meetup</option>
+    <option value="conferencia">Conferência</option>
+    <option value="workshop">Workshop</option>
+    <option value="outro">Outro</option>
+  </select>
+</div>
+
+<main id="lista"></main>
+<footer id="rodape"></footer>
+
+<script>
+  const MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+
+  const ICONE_DATA = '<svg viewBox="0 0 24 24"><path d="M7 2h2v2h6V2h2v2h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3V2zm12 8H5v9h14v-9z"/></svg>';
+  const ICONE_LOCAL = '<svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 5.2-7 13-7 13S5 14.2 5 9a7 7 0 0 1 7-7zm0 4.5A2.5 2.5 0 1 0 12 11.5 2.5 2.5 0 0 0 12 6.5z"/></svg>';
+
+  let eventos = [];
+
+  // "2026-10-17T08:00:00-03:00" -> "17 out - 2026 • 08:00"
+  // A coleta já salva no horário do Ceará, então basta recortar o texto.
+  function formatarData(texto) {
+    const [data, hora] = texto.split("T");
+    const [ano, mes, dia] = data.split("-");
+    return `${dia} ${MESES[mes - 1]} - ${ano} • ${hora.slice(0, 5)}`;
+  }
+
+  // Os textos vêm de outros sites; escapar evita que algum título injete HTML.
+  function esc(texto) {
+    const div = document.createElement("div");
+    div.textContent = texto || "";
+    return div.innerHTML;
+  }
+
+  function cartao(e) {
+    let data = formatarData(e.inicio);
+    if (e.fim) data += " > " + formatarData(e.fim);
+    const local = e.local || e.cidade;
+
+    return `
+      <article class="cartao">
+        <img src="${esc(e.imagem)}" alt="" loading="lazy">
+        <div class="detalhes">
+          <h3>${esc(e.titulo)}</h3>
+          <div class="linha">${ICONE_DATA}<span>${data}</span></div>
+          ${local ? `<div class="linha">${ICONE_LOCAL}<span>${esc(local)}</span></div>` : ""}
+        </div>
+        <a class="ver-mais" href="${esc(e.url)}" target="_blank">Ver mais &rsaquo;</a>
+      </article>`;
+  }
+
+  function mostrar() {
+    const busca = document.getElementById("busca").value.toLowerCase();
+    const tipo = document.getElementById("tipo").value;
+
+    const filtrados = eventos.filter((e) => {
+      const texto = [e.titulo, e.local, e.organizador].join(" ").toLowerCase();
+      return (!tipo || e.tipo === tipo) && texto.includes(busca);
+    });
+
+    document.getElementById("lista").innerHTML = filtrados.length
+      ? filtrados.map(cartao).join("")
+      : "<p>Nenhum evento encontrado.</p>";
+  }
+
+  async function carregar() {
+    const resposta = await fetch("../data/eventos.json", { cache: "no-store" });
+    eventos = await resposta.json();
+    eventos.sort((a, b) => a.inicio.localeCompare(b.inicio));
+
+    const coleta = eventos[0]?.coletado_em;
+    if (coleta) document.getElementById("rodape").textContent = "Atualizado em " + formatarData(coleta);
+    mostrar();
+  }
+
+  document.getElementById("busca").addEventListener("input", mostrar);
+  document.getElementById("tipo").addEventListener("change", mostrar);
+  document.getElementById("abrir-menu").addEventListener("click", () => document.body.classList.add("menu-aberto"));
+  document.getElementById("fundo-menu").addEventListener("click", () => document.body.classList.remove("menu-aberto"));
+
+  carregar();
+</script>
+</body>
+</html>

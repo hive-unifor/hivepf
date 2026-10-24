@@ -42,6 +42,7 @@ class Evento:
     fim: datetime | None = None
     prazo_inscricao: datetime | None = None
     url_inscricao: str | None = None
+    imagem: str | None = None  # URL da imagem de capa
     status: str = "pendente"
     # default_factory chama agora() a cada novo evento. Com "= agora()",
     # o horário seria calculado uma única vez e repetido em todos.

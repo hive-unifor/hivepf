@@ -34,8 +34,9 @@ crawler/            Aranha: descobre URLs de eventos (Python)
 scraper/            coleta de eventos (Python)
   fontes/           um módulo por fonte
 api/                back-end (a definir)
-web/                front-end (a definir)
+web/                página que lista os eventos
 data/               resultado da coleta enquanto não há banco de dados
+tests/              demonstração da base da coleta
 .github/workflows/  automações (coleta diária)
 ```
 
@@ -68,6 +69,40 @@ preencha `SERPER_API_KEY`:
 Copy-Item .env.example .env
 ```
 
+## Rodando a demo
+
+Com o ambiente virtual ativado, na raiz do projeto:
+
+```powershell
+# 1. Coletar os eventos (salva em data/eventos.json)
+python -m scraper.main
+
+# 2. Servir a página
+python -m http.server 8000
+```
+
+Depois abra http://localhost:8000/web/ no navegador.
+
+A página lê o `data/eventos.json`, então ela precisa ser aberta pelo servidor:
+abrindo o `index.html` direto do disco o navegador bloqueia a leitura do arquivo.
+
+Os comandos usam `python -m` e devem rodar a partir da raiz, porque o código
+importa os módulos como `scraper.modelo`, `scraper.rede` etc. Rodar
+`python scraper/main.py` dá `ModuleNotFoundError`.
+
+Outros comandos úteis:
+
+```powershell
+# Ver só os eventos da Sympla, sem salvar nada
+python -m scraper.fontes.sympla
+
+# Demonstração da base da coleta (não altera a pasta data/)
+python -m tests.demonstracao
+```
+
 ## Status
 
-Em desenvolvimento: estrutura inicial do projeto.
+Em desenvolvimento. Já funciona:
+
+- coleta de eventos de tecnologia de Fortaleza na Sympla;
+- página web listando os eventos, com busca e filtro por tipo.

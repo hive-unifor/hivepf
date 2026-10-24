@@ -14,6 +14,7 @@ import time
 from pathlib import Path
 from types import ModuleType
 
+from scraper.fontes import sympla
 from scraper.modelo import Evento, agora
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -23,7 +24,9 @@ ARQUIVO_LOG = RAIZ / "logs" / "coleta.log"
 
 # Fontes que rodam na coleta. Para desligar uma, basta comentar a linha.
 # Cada módulo precisa ter uma função coletar() que devolve list[Evento].
-FONTES: list[ModuleType] = []
+FONTES: list[ModuleType] = [
+    sympla,
+]
 
 log = logging.getLogger("hive")
 
