@@ -154,10 +154,12 @@
 
   // "2026-10-17T08:00:00-03:00" -> "17 out - 2026 • 08:00"
   // A coleta já salva no horário do Ceará, então basta recortar o texto.
+  // 00:00 quer dizer que a fonte não informou o horário, então ele não aparece.
   function formatarData(texto) {
     const [data, hora] = texto.split("T");
     const [ano, mes, dia] = data.split("-");
-    return `${dia} ${MESES[mes - 1]} - ${ano} • ${hora.slice(0, 5)}`;
+    const horario = hora.slice(0, 5) === "00:00" ? "" : ` • ${hora.slice(0, 5)}`;
+    return `${dia} ${MESES[mes - 1]} - ${ano}${horario}`;
   }
 
   // Os textos vêm de outros sites; escapar evita que algum título injete HTML.

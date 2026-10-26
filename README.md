@@ -93,7 +93,7 @@ importa os módulos como `scraper.modelo`, `scraper.rede` etc. Rodar
 Outros comandos úteis:
 
 ```powershell
-# Ver só os eventos da Sympla, sem salvar nada
+# Ver os eventos de uma fonte só, sem salvar nada (sympla, gdg, doity, unifor)
 python -m scraper.fontes.sympla
 
 # Demonstração da base da coleta (não altera a pasta data/)
@@ -104,5 +104,8 @@ python -m tests.demonstracao
 
 Em desenvolvimento. Já funciona:
 
-- coleta de eventos de tecnologia de Fortaleza na Sympla;
+- coleta de eventos de tecnologia no Ceará em quatro fontes: Sympla, GDG
+  Fortaleza, Doity e agenda da Unifor (`scraper/fontes/`);
+- deduplicação por URL e por título parecido no mesmo dia (o mesmo evento
+  divulgado em dois sites);
 - página web listando os eventos, com busca e filtro por tipo.

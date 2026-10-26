@@ -14,8 +14,9 @@ import time
 from pathlib import Path
 from types import ModuleType
 
-from scraper.fontes import sympla
+from scraper.fontes import doity, gdg, sympla, unifor
 from scraper.modelo import Evento, agora
+from scraper.texto import palavras
 
 RAIZ = Path(__file__).resolve().parent.parent
 ARQUIVO_EVENTOS = RAIZ / "data" / "eventos.json"
@@ -24,8 +25,12 @@ ARQUIVO_LOG = RAIZ / "logs" / "coleta.log"
 
 # Fontes que rodam na coleta. Para desligar uma, basta comentar a linha.
 # Cada módulo precisa ter uma função coletar() que devolve list[Evento].
+# A ordem importa: se o mesmo evento vier de duas fontes, fica o da primeira.
 FONTES: list[ModuleType] = [
     sympla,
+    gdg,
+    doity,
+    unifor,
 ]
 
 log = logging.getLogger("hive")
@@ -50,6 +55,27 @@ def nome_da_fonte(fonte: ModuleType) -> str:
     return fonte.__name__.rsplit(".", 1)[-1]
 
 
+def mesmo_evento(a: Evento, b: Evento) -> bool:
+    """Mesmo dia e títulos parecidos: o mesmo evento divulgado em dois sites.
+
+    Ex.: "Google DevFest Fortaleza 2026" (Sympla) e "DevFest Fortaleza 2026:
+    ampliando horizontes..." (GDG) têm URLs diferentes, mas são o mesmo evento.
+    Só compara fontes diferentes: dentro de uma fonte a URL já basta, e eventos
+    parecidos no mesmo dia (ex.: a mesma palestra em duas sedes) são distintos.
+    """
+    if a.fonte == b.fonte:
+        return False
+    if not a.inicio or not b.inicio or a.inicio.date() != b.inicio.date():
+        return False
+    # Só palavras com 4 letras ou mais, para "de", "em", "IA" não contarem.
+    pa = {p for p in palavras(a.titulo) if len(p) >= 4}
+    pb = {p for p in palavras(b.titulo) if len(p) >= 4}
+    if not pa or not pb:
+        return False
+    # Parecidos = 60% das palavras do título menor aparecem no outro.
+    return len(pa & pb) / min(len(pa), len(pb)) >= 0.6
+
+
 def executar(fontes: list[ModuleType]) -> dict:
     """Coleta de todas as fontes e devolve as métricas da execução."""
     # Sem fontes não há o que medir: para aqui para não gravar métricas vazias.
@@ -62,6 +88,7 @@ def executar(fontes: list[ModuleType]) -> dict:
     por_fonte: dict[str, int] = {}
     falhas: list[dict] = []
     # Dicionário com a URL como chave: uma URL repetida não entra de novo.
+    # Eventos iguais com URLs diferentes são pegos por mesmo_evento().
     eventos: dict[str, Evento] = {}
     duplicatas = 0
 
@@ -80,7 +107,7 @@ def executar(fontes: list[ModuleType]) -> dict:
         por_fonte[nome] = len(coletados)
         log.info("%s: %d eventos", nome, len(coletados))
         for evento in coletados:
-            if evento.url in eventos:
+            if evento.url in eventos or any(mesmo_evento(evento, outro) for outro in eventos.values()):
                 duplicatas += 1
             else:
                 eventos[evento.url] = evento

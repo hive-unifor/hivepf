@@ -10,11 +10,11 @@ Teste isolado: python -m scraper.fontes.sympla
 """
 import json
 import re
-import unicodedata
 from datetime import datetime
 
 from scraper.modelo import FUSO_CEARA, Evento, agora
 from scraper.rede import baixar
+from scraper.texto import eh_tecnologia, tipo_pelo_titulo
 
 BASE = "https://www.sympla.com.br/eventos/fortaleza-ce"
 
@@ -25,37 +25,6 @@ LISTAGEM_TECNOLOGIA = f"{BASE}/tecnologia/todos-eventos"
 
 # Categorias gerais: só entram eventos com palavra de tecnologia no título.
 PAGINAS_GERAIS = [f"{BASE}/congresso-palestra/todos-eventos", f"{BASE}/curso-workshop/todos-eventos"]
-
-# Palavras sem acento e em minúsculas, comparadas palavra por palavra.
-# "digital" e "data" ficaram de fora: pegavam marketing digital e datas.
-PALAVRAS_TECH = {
-    "tecnologia", "tech", "hackathon", "programacao", "dev", "devs", "devfest", "gdg",
-    "software", "dados", "ia", "ai", "python", "java", "javascript", "react", "cloud",
-    "nuvem", "aws", "azure", "stack", "sql", "startup", "startups", "inovacao",
-    "ciberseguranca", "blockchain", "robotica", "robo", "computacao", "ux", "web",
-}
-
-TIPOS = {
-    "hackathon": {"hackathon", "hackaton"},
-    "meetup": {"meetup", "encontro", "gdg", "comunidade"},
-    "workshop": {"workshop", "oficina", "curso", "imersao", "bootcamp", "treinamento", "aula"},
-    "conferencia": {"conferencia", "congresso", "summit", "devfest", "week", "semana",
-                    "forum", "roadshow", "festival", "palestra", "talk", "seminario"},
-}
-
-
-def palavras(texto: str) -> set[str]:
-    """'Computação em Nuvem' -> {'computacao', 'em', 'nuvem'}"""
-    sem_acento = unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode()
-    return set(re.findall(r"\w+", sem_acento.lower()))
-
-
-def tipo_pelo_titulo(titulo: str) -> str:
-    do_titulo = palavras(titulo)
-    for tipo, chaves in TIPOS.items():
-        if do_titulo & chaves:
-            return tipo
-    return "outro"
 
 
 def eventos_da_pagina(url: str) -> list[dict]:
@@ -126,7 +95,7 @@ def converter(bruto: dict) -> Evento:
 def coletar() -> list[Evento]:
     brutos = eventos_da_pagina(PAGINA_TECNOLOGIA) + eventos_paginados(LISTAGEM_TECNOLOGIA)
     for url in PAGINAS_GERAIS:
-        brutos += [e for e in eventos_paginados(url) if palavras(e["name"]) & PALAVRAS_TECH]
+        brutos += [e for e in eventos_paginados(url) if eh_tecnologia(e["name"])]
 
     # O mesmo evento aparece em mais de uma página; a URL resolve.
     unicos = {bruto["url"]: bruto for bruto in brutos}

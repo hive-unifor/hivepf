@@ -15,7 +15,7 @@
     "url_inscricao": "https://www.sympla.com.br/evento/meu-primeiro-robo-com-inteligencia-artificial/3614094",
     "imagem": "https://images.sympla.com.br/6ac963eacd119-lg.png",
     "status": "pendente",
-    "coletado_em": "2026-10-24T19:11:46.343951-03:00"
+    "coletado_em": "2026-10-26T17:53:54.337097-03:00"
   },
   {
     "titulo": "MARCIO CARDOSO RODRIGUES",
@@ -33,7 +33,7 @@
     "url_inscricao": "https://www.sympla.com.br/evento/marcio-cardoso-rodrigues/3616138",
     "imagem": "https://images.sympla.com.br/660b07867fe10-lg.jpg",
     "status": "pendente",
-    "coletado_em": "2026-10-24T19:11:46.343787-03:00"
+    "coletado_em": "2026-10-26T17:53:54.336276-03:00"
   },
   {
     "titulo": "Oficina Primeiros Passos em Computação em Nuvem com Amazon AWS",
@@ -51,7 +51,7 @@
     "url_inscricao": "https://www.sympla.com.br/evento/oficina-primeiros-passos-em-computacao-em-nuvem-com-amazon-aws/3621510",
     "imagem": "https://images.sympla.com.br/6ad26d4a7165a-lg.png",
     "status": "pendente",
-    "coletado_em": "2026-10-24T19:11:46.343897-03:00"
+    "coletado_em": "2026-10-26T17:53:54.337148-03:00"
   },
   {
     "titulo": "IMERSÃO DIGITAL - Full Stack do Zero: Construa Sua Primeira Aplicação",
@@ -69,7 +69,7 @@
     "url_inscricao": "https://www.sympla.com.br/evento/imersao-digital-full-stack-do-zero-construa-sua-primeira-aplicacao/3594905",
     "imagem": "https://images.sympla.com.br/6ab6bad3f2ba8-lg.jpg",
     "status": "pendente",
-    "coletado_em": "2026-10-24T19:11:46.344078-03:00"
+    "coletado_em": "2026-10-26T17:53:54.337257-03:00"
   },
   {
     "titulo": "FOCUS HALLOWEEN TECH ACADEMY",
@@ -87,7 +87,7 @@
     "url_inscricao": "https://www.sympla.com.br/evento/focus-halloween-tech-academy/3627622",
     "imagem": "https://images.sympla.com.br/6ad91b402dab6-lg.jpg",
     "status": "pendente",
-    "coletado_em": "2026-10-24T19:11:46.344335-03:00"
+    "coletado_em": "2026-10-26T17:53:54.337436-03:00"
   },
   {
     "titulo": "Digital Plus | Dashboard + IA: a Verdadeira Inteligência de Dados | SEDE SUL",
@@ -105,25 +105,7 @@
     "url_inscricao": "https://www.sympla.com.br/evento/digital-plus-dashboard-ia-a-verdadeira-inteligencia-de-dados-sede-sul/3597582",
     "imagem": "https://images.sympla.com.br/6abab1e5d4ab3-lg.png",
     "status": "pendente",
-    "coletado_em": "2026-10-24T19:11:46.343999-03:00"
-  },
-  {
-    "titulo": "IMERSÃO DIGITAL - SQL na prática: skill essencial para o Analista de Dados",
-    "url": "https://www.sympla.com.br/evento/imersao-digital-sql-na-pratica-skill-essencial-para-o-analista-de-dados/3594916",
-    "fonte": "sympla",
-    "tipo": "workshop",
-    "descricao": null,
-    "organizador": "Digital College",
-    "modalidade": "presencial",
-    "cidade": "Fortaleza",
-    "local": "Av. Santos Dumont, 1510, Avenida Santos Dumont 1510, Aldeota",
-    "inicio": "2026-10-29T18:30:00-03:00",
-    "fim": "2026-10-29T21:30:00-03:00",
-    "prazo_inscricao": null,
-    "url_inscricao": "https://www.sympla.com.br/evento/imersao-digital-sql-na-pratica-skill-essencial-para-o-analista-de-dados/3594916",
-    "imagem": "https://images.sympla.com.br/6ab6bbc0c6d43-lg.jpg",
-    "status": "pendente",
-    "coletado_em": "2026-10-24T19:11:46.344119-03:00"
+    "coletado_em": "2026-10-26T17:53:54.337190-03:00"
   },
   {
     "titulo": "Digital Plus | I.A aplicado no dia a dia do DEV | Sede Aldeota",
@@ -141,7 +123,7 @@
     "url_inscricao": "https://www.sympla.com.br/evento/digital-plus-i-a-aplicado-no-dia-a-dia-do-dev-sede-aldeota/3594759",
     "imagem": "https://images.sympla.com.br/6ab6a9d35eb9e-lg.png",
     "status": "pendente",
-    "coletado_em": "2026-10-24T19:11:46.344158-03:00"
+    "coletado_em": "2026-10-26T17:53:54.337291-03:00"
   },
   {
     "titulo": "Senior Roadshow CE | HCM",
@@ -159,7 +141,7 @@
     "url_inscricao": "https://www.sympla.com.br/evento/senior-roadshow-ce-hcm/3528253",
     "imagem": "https://images.sympla.com.br/6a29d1a369271-lg.jpg",
     "status": "pendente",
-    "coletado_em": "2026-10-24T19:11:46.344221-03:00"
+    "coletado_em": "2026-10-26T17:53:54.337343-03:00"
   },
   {
     "titulo": "INTELLIGENT AUTOMATION SUMMIT + AI STRATEGY SUMMIT FORTALEZA 2026",
@@ -177,7 +159,7 @@
     "url_inscricao": "https://www.sympla.com.br/evento/intelligent-automation-summit-ai-strategy-summit-fortaleza-2026/3225183",
     "imagem": "https://images.sympla.com.br/6a91ce60b7f53-lg.jpg",
     "status": "pendente",
-    "coletado_em": "2026-10-24T19:11:46.344372-03:00"
+    "coletado_em": "2026-10-26T17:53:54.337467-03:00"
   },
   {
     "titulo": "Imersão IA na Prática Clínica Nutricional",
@@ -195,7 +177,7 @@
     "url_inscricao": "https://www.sympla.com.br/evento/imersao-ia-na-pratica-clinica-nutricional/3517588",
     "imagem": "https://images.sympla.com.br/6a9f0173499ed-lg.png",
     "status": "pendente",
-    "coletado_em": "2026-10-24T19:11:46.344407-03:00"
+    "coletado_em": "2026-10-26T17:53:54.337496-03:00"
   },
   {
     "titulo": "Google DevFest Fortaleza 2026:",
@@ -213,7 +195,7 @@
     "url_inscricao": "https://www.sympla.com.br/evento/google-devfest-fortaleza-2026/3605127",
     "imagem": "https://images.sympla.com.br/6ac0f361480bb-lg.jpg",
     "status": "pendente",
-    "coletado_em": "2026-10-24T19:11:46.344036-03:00"
+    "coletado_em": "2026-10-26T17:53:54.337221-03:00"
   },
   {
     "titulo": "Boas práticas de instalação carregadores p/ veículos elétricos",
@@ -231,7 +213,7 @@
     "url_inscricao": "https://www.sympla.com.br/evento/boas-praticas-de-instalacao-carregadores-p-veiculos-eletricos/3628706",
     "imagem": "https://images.sympla.com.br/6ada467fcea7d-lg.png",
     "status": "pendente",
-    "coletado_em": "2026-10-24T19:11:46.344260-03:00"
+    "coletado_em": "2026-10-26T17:53:54.337375-03:00"
   },
   {
     "titulo": "Estações de recargas rápidas para veículos elétricos / Software Intelbras CVE - Pro",
@@ -249,7 +231,7 @@
     "url_inscricao": "https://www.sympla.com.br/evento/estacoes-de-recargas-rapidas-para-veiculos-eletricos-software-intelbras-cve-pro/3628747",
     "imagem": "https://images.sympla.com.br/6ada4bf753b75-lg.png",
     "status": "pendente",
-    "coletado_em": "2026-10-24T19:11:46.344304-03:00"
+    "coletado_em": "2026-10-26T17:53:54.337412-03:00"
   },
   {
     "titulo": "CERTIFICAÇÃO FRAHM",
@@ -267,6 +249,96 @@
     "url_inscricao": "https://www.sympla.com.br/evento/certificacao-frahm/3630164",
     "imagem": "https://images.sympla.com.br/6adba22f8d8a6-lg.jpg",
     "status": "pendente",
-    "coletado_em": "2026-10-24T19:11:46.344189-03:00"
+    "coletado_em": "2026-10-26T17:53:54.337317-03:00"
+  },
+  {
+    "titulo": "TXP Tech Meetup - Fortaleza",
+    "url": "https://www.sympla.com.br/evento/txp-tech-meetup-fortaleza/3617623",
+    "fonte": "sympla",
+    "tipo": "meetup",
+    "descricao": null,
+    "organizador": "TXP",
+    "modalidade": "presencial",
+    "cidade": "Fortaleza",
+    "local": "BS Tower, Rua Gonçalves Lêdo 777",
+    "inicio": "2026-11-26T18:30:00-03:00",
+    "fim": "2026-11-26T21:30:00-03:00",
+    "prazo_inscricao": null,
+    "url_inscricao": "https://www.sympla.com.br/evento/txp-tech-meetup-fortaleza/3617623",
+    "imagem": "https://images.sympla.com.br/6adf52243612e-lg.png",
+    "status": "pendente",
+    "coletado_em": "2026-10-26T17:53:54.336332-03:00"
+  },
+  {
+    "titulo": "2º WIRO - Workshop Nacional de Instrumentação e Robótica Oceânica",
+    "url": "https://doity.com.br/2-wiro-workshop-nacional-de-instrumentacao-e-robotica-oceanica",
+    "fonte": "doity",
+    "tipo": "workshop",
+    "descricao": "O encontro será realizado nos dias 9 e 10 de novembro de 2026, em Fortaleza – CE, em formato híbrido, possibilitando a participação presencial e on-line. Durante dois dias, o WIRO promoverá palestras, apresentações, mesas-redondas e debates com especialistas, criando um ambiente de intercâmbio de conhecimentos e articulação entre academia, setor produtivo e instituições públicas.Por que participar?O WIRO busca fortalecer o ecossistema brasileiro de Instrumentação e Robótica Oceânica, estimulando a inovação tecnológica, a autonomia nacional, o desenvolvimento da cadeia produtiva e a formação de recursos humanos, além de aproximar ICTs, empresas e governo na busca de soluções para demandas estratégicas relacionadas ao oceano. Esses temas estiveram no centro da primeira edição, realizada em dezembro de 2024, que reuniu 55 participantes de diferentes regiões do Brasil. A programação preliminar do 2º WIRO prevê apresentações sobre o presente e o futuro da RINSTRO, trabalhos desenvolvidos pelos grupos integrantes da rede, palestras com pesquisadores e empresas e discussões sobre as necessidades nacionais em Instrumentação e Robótica Oceânica, além de mesas-redondas voltadas ao debate e à construção de novas conexões. O evento é uma iniciativa da RINSTRO – Rede de Instrumentação, Robótica e Melhores Práticas, com participação do LIOc – Laboratório de Instrumentação Oceanográfica (COPPE/UFRJ). Inscreva-se gratuitamente e escolha sua modalidade de participação: presencial ou on-line. Vagas presenciais limitadas. A inscrição para participação presencial estará sujeita a confirmação em função da disponibilidade do auditório. Visite o nosso site: https://rinstro.renomo.org.br/event/segundoWIRO",
+    "organizador": "LIOC - Laboratório de Instrumentação Oceanográfica",
+    "modalidade": "online",
+    "cidade": null,
+    "local": null,
+    "inicio": "2026-11-09T09:00:00-03:00",
+    "fim": "2026-11-10T18:00:00-03:00",
+    "prazo_inscricao": null,
+    "url_inscricao": "https://doity.com.br/2-wiro-workshop-nacional-de-instrumentacao-e-robotica-oceanica",
+    "imagem": "https://grcmlesydpcd.objectstorage.sa-saopaulo-1.oci.customer-oci.com/p/OQwcvnO-c63O08Gc2Kv4OTbJttj5ik60dguiDIyyQ0wuo5SWn-jHOLW9wNbylNqI/n/grcmlesydpcd/b/dtysppobjmntbkp01/o/media/doity/fb001122.png",
+    "status": "pendente",
+    "coletado_em": "2026-10-26T17:54:10.598643-03:00"
+  },
+  {
+    "titulo": "TechDay 2026",
+    "url": "https://doity.com.br/techday-2026",
+    "fonte": "doity",
+    "tipo": "outro",
+    "descricao": "O TECHDAY 2026, com o tema “Um dia para conectar ideias e transformar conhecimento!”, será uma experiência de aprendizagem, inovação e integração para os estudantes dos cursos de Desenvolvimento de Sistemas e Redes de Computadores da EEEP Francisca Neilyta Carneiro Albuquerque. O evento reunirá palestras, minicursos, oficinas e workshops, proporcionando momentos de troca de conhecimentos, experiências e práticas entre alunos, professores e convidados. A programação busca aproximar os estudantes das novas tecnologias e das demandas do mercado de trabalho, fortalecendo a educação profissional e incentivando a criatividade, a colaboração e o desenvolvimento de novas habilidades.",
+    "organizador": "Prof. JVidal",
+    "modalidade": "presencial",
+    "cidade": "Massapê",
+    "local": "EEEP Francisca Neilyta Carneiro Albuquerque, S/N",
+    "inicio": "2026-11-27T07:30:00-03:00",
+    "fim": "2026-11-27T16:40:00-03:00",
+    "prazo_inscricao": null,
+    "url_inscricao": "https://doity.com.br/techday-2026",
+    "imagem": "https://grcmlesydpcd.objectstorage.sa-saopaulo-1.oci.customer-oci.com/p/OQwcvnO-c63O08Gc2Kv4OTbJttj5ik60dguiDIyyQ0wuo5SWn-jHOLW9wNbylNqI/n/grcmlesydpcd/b/dtysppobjmntbkp01/o/media/doity/fb001122.png",
+    "status": "pendente",
+    "coletado_em": "2026-10-26T17:54:12.254593-03:00"
+  },
+  {
+    "titulo": "Vanessa Queiroz é destaque da Semana do Design Unifor com debate sobre criatividade na era da IA",
+    "url": "https://unifor.br/-/vanessa-queiroz-e-destaque-da-semana-do-design-unifor-com-debate-sobre-criatividade-na-era-da-ia",
+    "fonte": "unifor",
+    "tipo": "conferencia",
+    "descricao": null,
+    "organizador": "Unifor",
+    "modalidade": "presencial",
+    "cidade": "Fortaleza",
+    "local": "Unifor",
+    "inicio": "2026-11-03T00:00:00-03:00",
+    "fim": "2026-11-05T00:00:00-03:00",
+    "prazo_inscricao": null,
+    "url_inscricao": "https://unifor.br/-/vanessa-queiroz-e-destaque-da-semana-do-design-unifor-com-debate-sobre-criatividade-na-era-da-ia",
+    "imagem": "https://unifor.br/documents/20143/0/WhatsApp%20Image%202026-10-06%20at%2010.19.30%20%281%29.jpeg/217816fe-f566-f49a-aadf-5d38a12145c9?version=1.0&t=1791293921796",
+    "status": "pendente",
+    "coletado_em": "2026-10-26T17:54:14.542026-03:00"
+  },
+  {
+    "titulo": "Unifor recebe 11ª edição do Youth LACIGF, fórum sobre governança da Internet para jovens da América Latina e do Caribe",
+    "url": "https://unifor.br/-/unifor-recebe-11-edicao-do-youth-lacigf-forum-sobre-governanca-da-internet-para-jovens-da-america-latina-e-do-caribe",
+    "fonte": "unifor",
+    "tipo": "conferencia",
+    "descricao": null,
+    "organizador": "Unifor",
+    "modalidade": "presencial",
+    "cidade": "Fortaleza",
+    "local": "Auditório da Biblioteca - Unifor",
+    "inicio": "2026-11-03T00:00:00-03:00",
+    "fim": "2026-11-04T00:00:00-03:00",
+    "prazo_inscricao": null,
+    "url_inscricao": "https://unifor.br/-/unifor-recebe-11-edicao-do-youth-lacigf-forum-sobre-governanca-da-internet-para-jovens-da-america-latina-e-do-caribe",
+    "imagem": "https://unifor.br/documents/20143/0/Copia-de-Disenos-para-YouthLACIGF-2048-x-562-px-1024x281%20%281%29.jpg/f0a20b46-d3ed-27c5-cd10-598d7f62802b?version=1.0&t=1790688691938",
+    "status": "pendente",
+    "coletado_em": "2026-10-26T17:54:14.542808-03:00"
   }
 ]

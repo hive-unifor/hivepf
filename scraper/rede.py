@@ -16,6 +16,11 @@ USER_AGENT = "HIVE-TCC/0.1 (projeto academico)"
 PAUSA_MINIMA = 1.0  # segundos entre requisições ao mesmo site
 TIMEOUT = 20  # segundos esperando o site responder
 
+# Sites que pedem uma pausa maior no robots.txt (Crawl-delay).
+PAUSA_POR_SITE = {
+    "gdg.community.dev": 2.0,
+}
+
 # A sessão guarda o cabeçalho e reaproveita a conexão com cada site.
 _sessao = requests.Session()
 _sessao.headers["User-Agent"] = USER_AGENT
@@ -36,7 +41,8 @@ def baixar(url: str, **kwargs) -> requests.Response:
     # do Windows durante a coleta não bagunçam a conta da pausa.
     ultima = _ultima_requisicao.get(site)
     if ultima is not None:
-        espera = PAUSA_MINIMA - (time.monotonic() - ultima)
+        pausa = PAUSA_POR_SITE.get(site, PAUSA_MINIMA)
+        espera = pausa - (time.monotonic() - ultima)
         if espera > 0:
             time.sleep(espera)
 
