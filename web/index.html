@@ -139,6 +139,14 @@
     <option value="workshop">Workshop</option>
     <option value="outro">Outro</option>
   </select>
+  <label for="fonte">Fonte</label>
+  <select id="fonte">
+    <option value="">Todas</option>
+    <option value="sympla">Sympla</option>
+    <option value="gdg">GDG Fortaleza</option>
+    <option value="doity">Doity</option>
+    <option value="unifor">Unifor</option>
+  </select>
 </div>
 
 <main id="lista"></main>
@@ -189,10 +197,11 @@
   function mostrar() {
     const busca = document.getElementById("busca").value.toLowerCase();
     const tipo = document.getElementById("tipo").value;
+    const fonte = document.getElementById("fonte").value;
 
     const filtrados = eventos.filter((e) => {
       const texto = [e.titulo, e.local, e.organizador].join(" ").toLowerCase();
-      return (!tipo || e.tipo === tipo) && texto.includes(busca);
+      return (!tipo || e.tipo === tipo) && (!fonte || e.fonte === fonte) && texto.includes(busca);
     });
 
     document.getElementById("lista").innerHTML = filtrados.length
@@ -212,6 +221,7 @@
 
   document.getElementById("busca").addEventListener("input", mostrar);
   document.getElementById("tipo").addEventListener("change", mostrar);
+  document.getElementById("fonte").addEventListener("change", mostrar);
   document.getElementById("abrir-menu").addEventListener("click", () => document.body.classList.add("menu-aberto"));
   document.getElementById("fundo-menu").addEventListener("click", () => document.body.classList.remove("menu-aberto"));
 
