@@ -26,11 +26,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  coletar-e-publicar:
+  # Job 1: coleta os eventos, monta o site e envia para o GitHub.
+  coletar:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.publicar.outputs.page_url }}web/
     steps:
       - name: Baixar o código
         uses: actions/checkout@v7
@@ -58,8 +56,6 @@ jobs:
           cp data/eventos.json _site/data/
           echo '<meta http-equiv="refresh" content="0; url=web/">' > _site/index.html
 
-      # Versões iguais às do modelo oficial do GitHub para Pages
-      # (starter-workflows/pages/static.yml).
       - name: Preparar o Pages
         uses: actions/configure-pages@v5
 
@@ -67,10 +63,6 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
-
-      - name: Publicar no GitHub Pages
-        id: publicar
-        uses: actions/deploy-pages@v5
 
       # Métricas e log de cada execução ficam guardados na aba Actions por
       # 90 dias: material para a seção de resultados do relatório.
@@ -83,3 +75,17 @@ jobs:
             data/metricas.jsonl
             logs/coleta.log
           if-no-files-found: ignore
+
+  # Job 2: publica o site. Fica separado porque o GitHub leva alguns
+  # segundos para registrar o arquivo enviado; no mesmo job, a publicação
+  # procurava cedo demais e não achava nada ("Found 0 artifact(s)").
+  publicar:
+    needs: coletar
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.publicar.outputs.page_url }}
+    steps:
+      - name: Publicar no GitHub Pages
+        id: publicar
+        uses: actions/deploy-pages@v5
