@@ -212,6 +212,13 @@
   async function carregar() {
     const resposta = await fetch("../data/eventos.json", { cache: "no-store" });
     eventos = await resposta.json();
+
+    // Esconde o que já terminou, caso o eventos.json seja de uma coleta antiga.
+    // Compara só o dia (formato "2026-11-24" no horário de Fortaleza), como a
+    // fonte Unifor: evento sem horário de fim continua aparecendo no próprio dia.
+    const hoje = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Fortaleza" }).format(new Date());
+    eventos = eventos.filter((e) => (e.fim || e.inicio).slice(0, 10) >= hoje);
+
     eventos.sort((a, b) => a.inicio.localeCompare(b.inicio));
 
     const coleta = eventos[0]?.coletado_em;

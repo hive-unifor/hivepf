@@ -1,0 +1,80 @@
+# Coleta automática + publicação do site no GitHub Pages.
+#
+# Roda todo dia de manhã, a cada push na main e também pelo botão
+# "Run workflow" na aba Actions (útil para atualizar antes da apresentação).
+# A coleta acontece nos servidores do GitHub; o resultado não é commitado,
+# vai direto para o site publicado. Assim o histórico do Git não enche de
+# commits automáticos do eventos.json.
+name: Coleta e publicação
+
+on:
+  schedule:
+    - cron: "0 9 * * *"  # 09:00 UTC = 06:00 em Fortaleza
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Permissões mínimas: ler o código e publicar no Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Duas execuções ao mesmo tempo não podem publicar uma por cima da outra.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  coletar-e-publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.publicar.outputs.page_url }}web/
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v5
+
+      - name: Instalar Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+          cache: pip
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      # Se todas as fontes falharem, o main.py mantém o eventos.json do
+      # repositório, então o site nunca fica vazio.
+      - name: Coletar eventos
+        run: python -m scraper.main
+
+      # O site mantém a mesma estrutura de pastas do repositório, porque a
+      # página busca "../data/eventos.json". A raiz só redireciona para web/.
+      - name: Montar o site
+        run: |
+          mkdir -p _site/web _site/data
+          cp -r web/. _site/web/
+          cp data/eventos.json _site/data/
+          echo '<meta http-equiv="refresh" content="0; url=web/">' > _site/index.html
+
+      - name: Enviar o site
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+      - name: Publicar no GitHub Pages
+        id: publicar
+        uses: actions/deploy-pages@v4
+
+      # Métricas e log de cada execução ficam guardados na aba Actions por
+      # 90 dias: material para a seção de resultados do relatório.
+      - name: Guardar métricas e log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: metricas-${{ github.run_number }}
+          path: |
+            data/metricas.jsonl
+            logs/coleta.log
+          if-no-files-found: ignore
