@@ -58,8 +58,13 @@ jobs:
           cp data/eventos.json _site/data/
           echo '<meta http-equiv="refresh" content="0; url=web/">' > _site/index.html
 
+      # Versões iguais às do modelo oficial do GitHub para Pages
+      # (starter-workflows/pages/static.yml).
+      - name: Preparar o Pages
+        uses: actions/configure-pages@v5
+
       - name: Enviar o site
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-pages-artifact@v3
         with:
           path: _site
 
