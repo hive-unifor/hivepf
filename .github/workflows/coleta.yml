@@ -33,10 +33,10 @@ jobs:
       url: ${{ steps.publicar.outputs.page_url }}web/
     steps:
       - name: Baixar o código
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Instalar Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.14"
           cache: pip
@@ -59,19 +59,19 @@ jobs:
           echo '<meta http-equiv="refresh" content="0; url=web/">' > _site/index.html
 
       - name: Enviar o site
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: _site
 
       - name: Publicar no GitHub Pages
         id: publicar
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
       # Métricas e log de cada execução ficam guardados na aba Actions por
       # 90 dias: material para a seção de resultados do relatório.
       - name: Guardar métricas e log
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: metricas-${{ github.run_number }}
           path: |
