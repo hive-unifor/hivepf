@@ -14,7 +14,7 @@ from datetime import datetime
 
 from scraper.modelo import FUSO_CEARA, Evento, agora
 from scraper.rede import baixar
-from scraper.texto import eh_tecnologia, tipo_pelo_titulo
+from scraper.texto import eh_tecnologia, html_para_texto, tipo_pelo_titulo
 
 BASE = "https://www.sympla.com.br/eventos/fortaleza-ce"
 
@@ -92,6 +92,18 @@ def converter(bruto: dict) -> Evento:
     )
 
 
+def descricao(url: str) -> str | None:
+    """A listagem não traz a descrição; ela fica na página do evento,
+    no campo "detail" do bloco __NEXT_DATA__ (em HTML)."""
+    pagina = baixar(url).text
+    bloco = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', pagina, re.S)
+    if not bloco:
+        return None
+    dados = json.loads(bloco.group(1))
+    evento = dados["props"]["pageProps"].get("hydrationData", {}).get("eventHydration", {}).get("event", {})
+    return html_para_texto(evento.get("detail"))
+
+
 def coletar() -> list[Evento]:
     brutos = eventos_da_pagina(PAGINA_TECNOLOGIA) + eventos_paginados(LISTAGEM_TECNOLOGIA)
     for url in PAGINAS_GERAIS:
@@ -107,6 +119,11 @@ def coletar() -> list[Evento]:
         evento = converter(bruto)
         if (evento.fim or evento.inicio) < agora():
             continue  # já terminou
+        # Sem a descrição o evento ainda serve; uma página com erro não derruba a fonte.
+        try:
+            evento.descricao = descricao(evento.url)
+        except Exception:
+            pass
         eventos.append(evento)
 
     eventos.sort(key=lambda e: e.inicio)

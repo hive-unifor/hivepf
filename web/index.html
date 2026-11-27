@@ -105,13 +105,65 @@
     margin: auto auto 0;
     width: 62%;
     padding: 8px 0;
+    border: 0;
     border-radius: 6px;
+    background: var(--azul);
+    color: #fff;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  /* Popup de detalhes. O <dialog> já escurece o fundo e fecha com Esc. */
+  #popup {
+    width: min(920px, calc(100vw - 32px));
+    max-height: calc(100vh - 32px);
+    padding: 20px;
+    border: 0;
+    border-radius: 16px;
+    background: var(--cinza);
+    color: var(--azul);
+  }
+  #popup::backdrop { background: rgba(0, 0, 0, 0.5); }
+  body:has(#popup[open]) { overflow: hidden; }
+  #fechar {
+    float: right;
+    width: 36px;
+    height: 36px;
+    margin: -8px -8px 0 0;
+    border: 0;
+    background: none;
+    color: var(--azul);
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .popup-topo { display: grid; grid-template-columns: 1fr 340px; gap: 16px; clear: both; }
+  .caixa { padding: 18px 20px; border-radius: 14px; background: #fff; font-size: 13px; line-height: 1.55; }
+  .caixa p { margin: 0 0 8px; }
+  .caixa h2 { margin: 0 0 10px; font-size: 26px; text-align: center; }
+  .caixa h3 { margin: 0 0 8px; font-size: 15px; }
+  .caixa .linha { margin: 0 0 6px; }
+  .lado { display: flex; flex-direction: column; gap: 12px; }
+  .lado img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 14px; background: #ececec; }
+  .inscrever {
+    display: block;
+    padding: 12px 0;
+    border-radius: 10px;
     background: var(--azul);
     color: #fff;
     text-align: center;
     text-decoration: none;
-    font-size: 13px;
-    font-weight: 500;
+    font-weight: 600;
+  }
+  .fonte-popup { margin: 0; font-size: 12px; text-align: center; color: #555; }
+  #p-resto { margin-top: 16px; }
+
+  @media (max-width: 700px) {
+    .popup-topo { grid-template-columns: 1fr; }
+    .lado { order: -1; }  /* no celular, imagem e botão vêm primeiro */
+    .caixa h2 { font-size: 20px; }
   }
   .detalhes { margin-bottom: 12px; }
 
@@ -152,6 +204,25 @@
 <main id="lista"></main>
 <footer id="rodape"></footer>
 
+<dialog id="popup">
+  <button id="fechar" aria-label="Fechar">&times;</button>
+  <div class="popup-topo">
+    <section class="caixa">
+      <h2>Descrição do evento</h2>
+      <h3 id="p-titulo"></h3>
+      <div class="linha"><span id="p-data"></span></div>
+      <div class="linha" id="p-linha-local"><span id="p-local"></span></div>
+      <div id="p-resumo"></div>
+    </section>
+    <div class="lado">
+      <img id="p-imagem" alt="">
+      <a id="p-inscrever" class="inscrever" target="_blank" rel="noopener">Inscrever-se</a>
+      <p class="fonte-popup" id="p-fonte"></p>
+    </div>
+  </div>
+  <section class="caixa" id="p-resto"></section>
+</dialog>
+
 <script>
   const MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
 
@@ -177,21 +248,59 @@
     return div.innerHTML;
   }
 
-  function cartao(e) {
-    let data = formatarData(e.inicio);
-    if (e.fim) data += " > " + formatarData(e.fim);
-    const local = e.local || e.cidade;
+  function periodo(e) {
+    return e.fim ? formatarData(e.inicio) + " > " + formatarData(e.fim) : formatarData(e.inicio);
+  }
 
+  function cartao(e) {
+    const local = e.local || e.cidade;
     return `
       <article class="cartao">
         <img src="${esc(e.imagem)}" alt="" loading="lazy">
         <div class="detalhes">
           <h3>${esc(e.titulo)}</h3>
-          <div class="linha">${ICONE_DATA}<span>${data}</span></div>
+          <div class="linha">${ICONE_DATA}<span>${periodo(e)}</span></div>
           ${local ? `<div class="linha">${ICONE_LOCAL}<span>${esc(local)}</span></div>` : ""}
         </div>
-        <a class="ver-mais" href="${esc(e.url)}" target="_blank">Ver mais &rsaquo;</a>
+        <button class="ver-mais" data-indice="${eventos.indexOf(e)}">Ver mais &rsaquo;</button>
       </article>`;
+  }
+
+  const NOMES_FONTE = { sympla: "Sympla", gdg: "GDG Fortaleza", doity: "Doity", unifor: "Unifor" };
+
+  function paragrafos(linhas) {
+    return linhas.map((linha) => `<p>${esc(linha)}</p>`).join("");
+  }
+
+  function abrirPopup(e) {
+    document.getElementById("p-titulo").textContent = e.titulo;
+    document.getElementById("p-data").textContent = periodo(e);
+    document.getElementById("p-local").textContent = e.local || e.cidade || "";
+    document.getElementById("p-linha-local").hidden = !(e.local || e.cidade);
+    document.getElementById("p-imagem").src = e.imagem || "";
+    document.getElementById("p-inscrever").href = e.url_inscricao || e.url;
+    document.getElementById("p-fonte").textContent = "Divulgado por " + (NOMES_FONTE[e.fonte] || e.fonte);
+
+    // Muitas descrições começam repetindo o título; essa linha sai.
+    let linhas = (e.descricao || "").split("\n").filter((l) => l && l !== e.titulo);
+
+    // O começo do texto (até uns 400 caracteres) fica na caixa de cima,
+    // ao lado da imagem; o restante vai para a caixa de baixo, como no mockup.
+    let corte = 0, tamanho = 0;
+    while (corte < linhas.length && (corte === 0 || tamanho + linhas[corte].length <= 400)) {
+      tamanho += linhas[corte].length;
+      corte++;
+    }
+    document.getElementById("p-resumo").innerHTML = linhas.length
+      ? paragrafos(linhas.slice(0, corte))
+      : "<p>Mais detalhes no site do evento.</p>";
+
+    const resto = document.getElementById("p-resto");
+    resto.innerHTML = paragrafos(linhas.slice(corte));
+    resto.hidden = linhas.length <= corte;
+
+    document.getElementById("popup").showModal();
+    document.getElementById("popup").scrollTop = 0;
   }
 
   function mostrar() {
@@ -231,6 +340,24 @@
   document.getElementById("fonte").addEventListener("change", mostrar);
   document.getElementById("abrir-menu").addEventListener("click", () => document.body.classList.add("menu-aberto"));
   document.getElementById("fundo-menu").addEventListener("click", () => document.body.classList.remove("menu-aberto"));
+
+  document.getElementById("p-data").insertAdjacentHTML("beforebegin", ICONE_DATA);
+  document.getElementById("p-local").insertAdjacentHTML("beforebegin", ICONE_LOCAL);
+
+  // Um só "ouvinte" na lista atende todos os botões "Ver mais", até os que
+  // forem desenhados de novo depois de filtrar.
+  document.getElementById("lista").addEventListener("click", (ev) => {
+    const botao = ev.target.closest(".ver-mais");
+    if (botao) abrirPopup(eventos[botao.dataset.indice]);
+  });
+  const popup = document.getElementById("popup");
+  document.getElementById("fechar").addEventListener("click", () => popup.close());
+  // Clique fora da janela (no fundo escuro) também fecha.
+  popup.addEventListener("click", (ev) => {
+    const r = popup.getBoundingClientRect();
+    const fora = ev.clientX < r.left || ev.clientX > r.right || ev.clientY < r.top || ev.clientY > r.bottom;
+    if (fora) popup.close();
+  });
 
   carregar();
 </script>

@@ -1,4 +1,6 @@
-"""Funções de texto usadas por várias fontes: filtro de tecnologia e tipo do evento."""
+"""Funções de texto usadas por várias fontes: filtro de tecnologia, tipo do
+evento e limpeza das descrições."""
+import html
 import re
 import unicodedata
 
@@ -31,6 +33,22 @@ def palavras(texto: str) -> set[str]:
 
 def eh_tecnologia(texto: str) -> bool:
     return bool(palavras(texto) & PALAVRAS_TECH)
+
+
+def html_para_texto(conteudo: str | None) -> str | None:
+    """Tira as tags HTML mas mantém os parágrafos, um por linha.
+
+    '<p>Oficina</p><p><b>Dia 17</b>: robôs</p>' -> 'Oficina\\nDia 17: robôs'
+    """
+    if not conteudo:
+        return None
+    # Fim de parágrafo, quebra de linha e item de lista viram "\n".
+    conteudo = re.sub(r"<br\s*/?>|</p>|</div>|</li>|</h\d>", "\n", conteudo, flags=re.I)
+    conteudo = re.sub(r"<li[^>]*>", "\n• ", conteudo, flags=re.I)
+    conteudo = html.unescape(re.sub(r"<[^>]+>", "", conteudo))
+    linhas = (" ".join(linha.split()) for linha in conteudo.splitlines())
+    texto = "\n".join(linha for linha in linhas if linha)
+    return texto or None
 
 
 def tipo_pelo_titulo(titulo: str, padrao: str = "outro") -> str:

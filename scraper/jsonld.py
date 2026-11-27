@@ -10,7 +10,7 @@ import re
 from datetime import datetime
 
 from scraper.modelo import FUSO_CEARA, Evento
-from scraper.texto import tipo_pelo_titulo
+from scraper.texto import html_para_texto, tipo_pelo_titulo
 
 MODALIDADES = {
     "OfflineEventAttendanceMode": "presencial",
@@ -76,14 +76,14 @@ def converter(dados: dict, fonte: str) -> Evento:
         nome_local = None
 
     modo = str(dados.get("eventAttendanceMode", "")).rsplit("/", 1)[-1]
-    descricao = re.sub(r"<[^>]+>", " ", html.unescape(dados.get("description") or ""))
 
     return Evento(
         titulo=" ".join(dados["name"].split()),
         url=dados["url"],
         fonte=fonte,
         tipo=tipo_pelo_titulo(dados["name"]),
-        descricao=" ".join(descricao.split()) or None,
+        # O Doity às vezes manda o HTML já escapado (&lt;p&gt;), por isso o unescape antes.
+        descricao=html_para_texto(html.unescape(dados.get("description") or "")),
         organizador=organizador.get("name") if isinstance(organizador, dict) else None,
         modalidade=MODALIDADES.get(modo),
         cidade=endereco.get("addressLocality"),

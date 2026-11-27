@@ -44,6 +44,16 @@ def ler_datas(data: str, horario: str) -> tuple[datetime, datetime | None]:
     return inicio, fim
 
 
+def descricao(url: str) -> str | None:
+    """O texto da notícia do evento, parágrafo por parágrafo (os <p> de .asset-content)."""
+    sopa = BeautifulSoup(baixar(url).text, "html.parser")
+    corpo = sopa.select_one(".asset-content")
+    if not corpo:
+        return None
+    paragrafos = [" ".join(p.get_text(" ").split()) for p in corpo.find_all("p")]
+    return "\n".join(p for p in paragrafos if p) or None
+
+
 def coletar() -> list[Evento]:
     sopa = BeautifulSoup(baixar(AGENDA).text, "html.parser")
     eventos = []
@@ -65,11 +75,16 @@ def coletar() -> list[Evento]:
             continue
 
         imagem = cartao.select_one("img")
+        try:
+            texto = descricao(cartao["href"])
+        except Exception:
+            texto = None  # sem a descrição o evento ainda serve
         eventos.append(Evento(
             titulo=titulo,
             url=cartao["href"],
             fonte="unifor",
             tipo=tipo_pelo_titulo(titulo),
+            descricao=texto,
             organizador="Unifor",
             modalidade="presencial",
             cidade="Fortaleza",
